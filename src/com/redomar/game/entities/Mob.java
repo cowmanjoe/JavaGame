@@ -248,6 +248,12 @@ public abstract class Mob extends Entity {
 			level.addProjectileEntities(p);
 		}
 	}
+	
+	protected void shootOut(double x, double y, boolean secondry, int numShots) {
+		for (int i = 0; i < numShots; i++) {
+			this.shoot(x, y, (2 * Math.PI / numShots) * i , 1, secondry);
+		}
+	}
 
 	public String getName() {
 		return name;
@@ -272,5 +278,7 @@ public abstract class Mob extends Entity {
 	public void setMovingDir(int movingDir) {
 		this.movingDir = movingDir;
 	}
+
+	
 
 }

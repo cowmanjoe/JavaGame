@@ -47,6 +47,8 @@ public class Player extends Mob {
 	public void tick() {
 		double xa = 0;
 		double ya = 0;
+		
+		
 
 		if (input != null) {
 			if (input.getUp().isPressed() && input.isIgnoreInput() == false) {
@@ -62,7 +64,9 @@ public class Player extends Mob {
 				xa += speed;
 			}
 			if (input.getSpace().isPressed() && input.isIgnoreInput() == false) {
-				
+
+				shootOut(x, y, false, 10);
+				System.out.println("Space pressed");
 			}
 			
 		}
@@ -75,7 +79,7 @@ public class Player extends Mob {
 					fireRate = Small.FIRE_RATE;	
 				}else if(Game.getMouse().getButton() == 3){
 					fireRate = Medium.FIRE_RATE;
-				}
+				}  
 				if(!swim.isActive(swimType)){
 					double dx = Game.getMouse().getX() - 480/2;
 					double dy = Game.getMouse().getY() - 320/2;
@@ -243,5 +247,6 @@ public class Player extends Mob {
 	public static void setSpeed(double speed) {
 		Player.speed = speed;
 	}
+	
 
 }
