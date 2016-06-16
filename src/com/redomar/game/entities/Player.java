@@ -29,6 +29,7 @@ public class Player extends Mob {
 	private int[] swimColour;
 	private static int[] collisionBoders = {-2, 8, 0, 7};
 	private int fireRate = 0;
+	
 
 	public static String guestPlayerName = customeName.setName("Player ");
 
@@ -60,6 +61,10 @@ public class Player extends Mob {
 			if (input.getRight().isPressed() && input.isIgnoreInput() == false) {
 				xa += speed;
 			}
+			if (input.getSpace().isPressed() && input.isIgnoreInput() == false) {
+				
+			}
+			
 		}
 		
 		if(fireRate > 0) fireRate--;

@@ -46,11 +46,15 @@ public class InputHandler implements KeyListener {
 			numTimesPressed = 0;
 		}
 	}
+	
+	//new key for space
+	private Key space = new Key(); 
 
 	private Key up = new Key();
 	private Key down = new Key();
 	private Key left = new Key();
 	private Key right = new Key();
+	
 	private Printing print = new Printing();
 	private boolean PlayMusic = false;
 	private int map;
@@ -96,12 +100,19 @@ public class InputHandler implements KeyListener {
 			if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
 				right.toggle(isPressed);
 			}
+			
+			//logic for space
+			if (keyCode == KeyEvent.VK_SPACE) {
+				space.toggle(isPressed);
+			}
 		}
 		if (isIgnoreInput() == true) {
 			up.toggle(false);
 			down.toggle(false);
 			left.toggle(false);
 			right.toggle(false);
+			
+			space.toggle(false);
 		}
 		if (keyCode == KeyEvent.VK_M) {
 			this.setPlayMusic(true);
@@ -246,6 +257,14 @@ public class InputHandler implements KeyListener {
 
 	public void setRight(Key right) {
 		this.right = right;
+	}
+	
+	public Key getSpace() {
+		return space; 
+	}
+	
+	public void setSpace(Key space) {
+		this.space = space; 
 	}
 
 	public boolean isIgnoreInput() {
