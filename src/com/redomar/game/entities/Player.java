@@ -30,6 +30,7 @@ public class Player extends Mob {
 	private static int[] collisionBoders = {-2, 8, 0, 7};
 	private int fireRate = 0;
 	
+	private static final int SHOOT_OUT_FIRE_RATE = 40; 
 
 	public static String guestPlayerName = customeName.setName("Player ");
 
@@ -63,15 +64,20 @@ public class Player extends Mob {
 			if (input.getRight().isPressed() && input.isIgnoreInput() == false) {
 				xa += speed;
 			}
-			if (input.getSpace().isPressed() && input.isIgnoreInput() == false) {
-
-				shootOut(x, y, false, 10);
-				System.out.println("Space pressed");
-			}
+			
 			
 		}
 		
 		if(fireRate > 0) fireRate--;
+		
+		
+		if (input.getSpace().isPressed() && input.isIgnoreInput() == false) {
+			if(fireRate <= 0) {
+				fireRate = SHOOT_OUT_FIRE_RATE;
+				shootOut(x, y, false, 10);
+				System.out.println("Space pressed");
+			}
+		}
 		
 		if (Game.getMouse().getButton() == 1 || Game.getMouse().getButton() == 3){
 			if(fireRate <= 0){
