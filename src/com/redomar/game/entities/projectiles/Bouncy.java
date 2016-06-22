@@ -11,6 +11,10 @@ public class Bouncy extends Projectile {
 		range = 1000;
 		damage = 100; 
 		speed = 1;
+		distance = 0; 
+		
+		nx = speed * Math.cos(angle);
+		ny = speed * Math.sin(angle);
 	}
 	
 	
@@ -21,19 +25,21 @@ public class Bouncy extends Projectile {
 		
 		this.distance += Math.sqrt(nx * nx + ny * ny);
 		if (this.distance > range) remove(); 
-
+		
 	}
 
 	@Override
 	public void tick() {
-		if (tileCollisionSide(x, y, (int) nx, (int) ny) == "left" ||
-				tileCollisionSide(x, y, (int) nx, (int) ny) == "right") 
-			nx = -nx;  
-		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "top" ||
-				tileCollisionSide(x, y, (int) nx, (int) ny) == "bottom")
-			ny = -ny; 
-	
-
+		if (tileCollisionSide(x, y, (int) nx, (int) ny) == "left") 
+			nx = Math.abs(nx);  
+		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "right") 
+			nx = -Math.abs(nx);  
+		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "top")
+			ny = Math.abs(ny);
+		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "bottom")
+			ny = -Math.abs(ny); 
+		
+		move(); 
 	}
 
 	@Override

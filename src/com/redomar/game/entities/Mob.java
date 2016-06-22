@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.redomar.game.entities.projectiles.Bouncy;
 import com.redomar.game.entities.projectiles.Medium;
 import com.redomar.game.entities.projectiles.Projectile;
 import com.redomar.game.entities.projectiles.Small;
@@ -239,7 +240,8 @@ public abstract class Mob extends Entity {
 //		Printing print = new Printing();
 //		print.print("Angle: "+ dir, PrintTypes.GAME);
 		if(buttonId == 1){
-			Projectile p = new Small(level, (int) x,(int) y, dir);
+			//Projectile p = new Small(level, (int) x,(int) y, dir);
+			Projectile p = new Bouncy(level, (int) x, (int) y, dir); 
 			projectiles.add(p);
 			level.addProjectileEntities(p);
 		} else if(buttonId == 3 && secondry == true){

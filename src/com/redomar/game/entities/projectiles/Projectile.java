@@ -23,6 +23,7 @@ public abstract class Projectile extends Entity{
 		angle = dir;
 		this.x = x;
 		this.y = y;
+		
 	}
 
 	protected abstract void move();
