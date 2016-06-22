@@ -22,7 +22,9 @@ public abstract class Tile {
 	private static final Tile MAGMA = new AnimatedTile(12, new int [][] { { 0, 5 }, { 1, 5 }, { 2, 5 }, { 1, 5 } }, Colours.get(-1, 400, 511, -1), 0xFFF00F0F, 1000);
 	private static final Tile DIRT = new BasicTile(13, 3, 0, Colours.get(0, 210, 321, -1), 0xFF442200);
 	private static final Tile DIRT_WET = new AnimatedTile(14, new int[][] { { 1, 5 }, { 2, 5 } }, Colours.get(-1, 211, 322, -1), 0xFF663300, 1500);
-
+	
+	private static final Tile TELEPORTER = new BasicTile(15, 10, 0, Colours.get(0, colour2, colour3, colour4), 1)
+	
 	protected byte id;
 	protected boolean solid;
 	protected boolean emitter;
