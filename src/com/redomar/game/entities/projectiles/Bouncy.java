@@ -34,7 +34,8 @@ public class Bouncy extends Projectile {
 			nx = Math.abs(nx);  
 		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "right") 
 			nx = -Math.abs(nx);  
-		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "top")
+		
+		if (tileCollisionSide(x, y, (int) nx, (int) ny) == "top")
 			ny = Math.abs(ny);
 		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "bottom")
 			ny = -Math.abs(ny); 

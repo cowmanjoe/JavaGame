@@ -9,6 +9,8 @@ import java.awt.im.InputContext;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -76,7 +78,7 @@ public class Game extends Canvas implements Runnable {
 	private WindowHandler window;
 	private LevelHandler level;
 	private Player player;
-	private Dummy dummy;
+	private List<Dummy> dummies;
 	private Vendor vendor;
 	private Music music = new Music();
 	private Font font = new Font();
@@ -89,6 +91,8 @@ public class Game extends Canvas implements Runnable {
 	private GameServer socketServer;
 	private Printing print = new Printing();
 	private static InputContext context;
+	
+	private static boolean npcSpawning; 
 
 	/**
 	 * @author Redomar
@@ -111,6 +115,9 @@ public class Game extends Canvas implements Runnable {
 
 		setDevMode(false);
 		setClosing(false);
+		
+		dummies = new ArrayList<Dummy>(); 
+		npcSpawning = false; 
 	}
 
 	public void init() {
@@ -168,15 +175,25 @@ public class Game extends Canvas implements Runnable {
 
 	public static void npcSpawn() {
 		if (isNpc() == true) {
-			game.setDummy(new Dummy(game.level, "Dummy", 100, 150, 500,
-					543));
-			game.level.addEntity(Game.getDummy());
+			npcSpawning = true; 
+			Dummy newDummy = new Dummy(game.level, "Dummy", 100, 150, 500, 543);
+			game.addDummy(newDummy);
+			
+			for (int i = 0; i < 3; i++) {
+				Dummy d = new Dummy(game.level, "Dummy" + i, 50 * i, 150, 500, 543); 
+				game.addDummy(d);
+			}
+			
+			npcSpawning = false; 
+			
 		}
 	}
 
 	public static void npcKill() {
 		if (isNpc() == false) {
-			game.level.removeEntity(Game.getDummy());
+			for (Dummy d : getDummies()){
+				game.level.removeEntity(d);
+			}
 		}
 	}
 
@@ -249,8 +266,13 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void tick() {
-		setTickCount(getTickCount() + 1);
-		level.tick();
+		if (npcSpawning) 
+			System.out.println("spawning"); 
+		
+		if (!npcSpawning) {
+			setTickCount(getTickCount() + 1);
+			level.tick();
+		}
 	}
 
 	public void render() {
@@ -309,16 +331,18 @@ public class Game extends Canvas implements Runnable {
 			print.print("Teleported into new world", PrintTypes.GAME);
 			if (getMap() == 1) {
 				setMap("/levels/water_level.png");
-				if (getDummy() != null) { // Gave nullPointerException(); upon
+				if (getDummies() != null) { // Gave nullPointerException(); upon
 											// entering new world.
-					level.removeEntity(getDummy());
+					for (Dummy d : getDummies())
+						level.removeEntity(d);
 					setNpc(false);
 				}
 				level.removeEntity(getVendor());
 				setMap(2);
 			} else if (getMap() == 2) {
 				setMap("/levels/custom_level.png");
-				level.removeEntity(getDummy());
+				for (Dummy d : getDummies())
+					level.removeEntity(d);
 				setNpc(false);
 				level.addEntity(getVendor());
 				setMap(1);
@@ -517,12 +541,22 @@ public class Game extends Canvas implements Runnable {
 		Game.npc = npc;
 	}
 
-	public static Dummy getDummy() {
-		return game.dummy;
+	public static List<Dummy> getDummies() {
+		return game.dummies;
 	}
 
-	public void setDummy(Dummy dummy) {
-		this.dummy = dummy;
+	public void addDummy(Dummy dummy) {
+		dummies.add(dummy); 
+		game.level.addEntity(dummy);
+	}
+	
+	public void removeDummy(Dummy dummy) {
+		dummies.remove(dummy);
+		game.level.removeEntity(dummy);
+	}
+	
+	public void removeDummy() {
+		dummies.remove(dummies.size() - 1);
 	}
 
 	public Vendor getVendor() {
