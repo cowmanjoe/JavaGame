@@ -66,8 +66,10 @@ public abstract class Projectile extends Entity{
 	}
 	
 	
-	//Returns one of "left", "right", "top", "bottom" or "false"
+	//Returns one of "l", "r", "t", "b", "tr", "tl", "br", "bl" or ""
 	public String tileCollisionSide(double xa, double ya, int nx, int ny){
+		String ans = ""; 
+		
 		int xMin = 0;
 		int xMax = 7;
 		int yMin = 0;
@@ -76,32 +78,89 @@ public abstract class Projectile extends Entity{
 		//Top side
 		for (int x = xMin; x < xMax; x++) {
 			if (isSolid((int) xa, (int) ya, x, yMin, nx, ny)) {
-				return "top";
+				ans += "t";
+				break; 
 			}
 		}
 		
 		//Bottom side
 		for (int x = xMin; x < xMax; x++) {
-			if (isSolid((int) xa, (int) ya, x, yMax, nx, ny)) {
-				return "bottom";
+			if (isSolid((int) xa, (int) ya, x, yMax, nx, ny) && ans == "") {
+				ans += "b";
+				break; 
 			}
 		}
 		
 		//Left side
 		for (int y = yMin; y < yMax; y++) {
 			if (isSolid((int) xa, (int) ya, xMin, y, nx, ny)) {
-				return "left";
+				ans += "l";
+				break;
+			}
+		}
+		
+		//Right side
+		for (int y = yMin; y < yMax; y++) {
+			if (isSolid((int) xa, (int) ya, xMax, y, nx, ny) && 
+					ans.length() < 2 && ans != "l") {
+				ans += "r";
+				break; 
+			}
+		}
+
+		return ans;
+	}
+	
+	
+	//Returns -1 for left side, 1 for right side, 0 for no collision
+	public int tileCollisionX(double xa, double ya, int nx, int ny){
+		
+		
+		int xMin = 0;
+		int xMax = 7;
+		int yMin = 0;
+		int yMax = 7;
+		
+		
+		//Left side
+		for (int y = yMin; y < yMax; y++) {
+			if (isSolid((int) xa, (int) ya, xMin, y, nx, ny)) {
+				return -1;
 			}
 		}
 		
 		//Right side
 		for (int y = yMin; y < yMax; y++) {
 			if (isSolid((int) xa, (int) ya, xMax, y, nx, ny)) {
-				return "right";
+				return 1; 
 			}
 		}
 
-		return "false";
+		return 0;
+	}
+	
+	//Returns -1 for top, 1 for bottom, and 0 for no collision
+	public int tileCollisionY(double xa, double ya, int nx, int ny){
+		int xMin = 0;
+		int xMax = 7;
+		int yMin = 0;
+		int yMax = 7;
+		
+		//Top side
+		for (int x = xMin; x < xMax; x++) {
+			if (isSolid((int) xa, (int) ya, x, yMin, nx, ny)) {
+				return -1; 
+			}
+		}
+		
+		//Bottom side
+		for (int x = xMin; x < xMax; x++) {
+			if (isSolid((int) xa, (int) ya, x, yMax, nx, ny)) {
+				return 1; 
+			}
+		}
+
+		return 0;
 	}
 	
 	private boolean isSolid(int xa, int ya, int x, int y, int nx, int ny) {

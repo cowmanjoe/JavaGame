@@ -30,14 +30,17 @@ public class Bouncy extends Projectile {
 
 	@Override
 	public void tick() {
-		if (tileCollisionSide(x, y, (int) nx, (int) ny) == "left") 
+		int collisionX = tileCollisionX(x, y, (int) nx, (int) ny); 
+		int collisionY = tileCollisionY(x, y, (int) nx, (int) ny); 
+		
+		if (collisionX == -1) 
 			nx = Math.abs(nx);  
-		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "right") 
+		else if (collisionX == 1) 
 			nx = -Math.abs(nx);  
 		
-		if (tileCollisionSide(x, y, (int) nx, (int) ny) == "top")
+		if (collisionY == -1)
 			ny = Math.abs(ny);
-		else if (tileCollisionSide(x, y, (int) nx, (int) ny) == "bottom")
+		else if (collisionY == 1)
 			ny = -Math.abs(ny); 
 		
 		move(); 
