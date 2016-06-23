@@ -172,10 +172,9 @@ public abstract class Mob extends Entity {
 
 		return false;
 	}
-	
+	 
 	protected void aStarMovementAI(int x, int y, int px, int py, double xa,
 			double ya, double speed, Mob mob, List<Node> path, int time){
-		Random r = new Random();
 		xa = 0;
 		ya = 0;
 		Vector2i start = new Vector2i(x >> 3, y >> 3);

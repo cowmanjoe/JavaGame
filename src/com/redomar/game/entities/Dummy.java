@@ -21,6 +21,8 @@ public class Dummy extends Mob {
 	private List<Node> path = null;
 	private int time = 0;
 	private static int[] collisionBoders = {0, 7, 0, 7};
+	
+	private double activeRange; 
 
 	private Swim swim;
 
@@ -30,14 +32,39 @@ public class Dummy extends Mob {
 		this.faceCol = faceCol;
 		this.shirtCol = shirtCol;
 		this.colour = Colours.get(-1, 111, shirtCol, faceCol);
+		
+		activeRange = 50; 
+	}
+	
+	public Dummy(LevelHandler level, String name, int x, int y, int shirtCol, 
+			int faceCol, double activeRange) {
+		super(level, name, x, y, speed, collisionBoders);
+		this.faceCol = faceCol;
+		this.shirtCol = shirtCol;
+		this.colour = Colours.get(-1, 111, shirtCol, faceCol);
+		
+		this.activeRange = activeRange; 
+	}
+
+	private void Dummy(LevelHandler level, String name, int x, int y, int shirtCol2, int faceCol2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void tick() {
 
 		//List<Player> players = level.getPlayers(this, 8);
-		aStarMovementAI((int) getX(), (int) getY(), (int) Game.getPlayer().getX(), (int) Game
-					.getPlayer().getY(), xa, ya, speed, this, path, time);
+		Player player = Game.getPlayer(); 
 		
+		double xDistToPlayer = player.getX() - getX();
+		double yDistToPlayer = player.getY() - getY(); 
+		
+		double distToPlayer = Math.sqrt(xDistToPlayer * xDistToPlayer + yDistToPlayer * yDistToPlayer);
+		
+		if (distToPlayer <= activeRange) {
+			aStarMovementAI((int) getX(), (int) getY(), (int) Game.getPlayer().getX(), (int) Game
+						.getPlayer().getY(), xa, ya, speed, this, path, time);
+		}
 
 		setSwim(new Swim(level, (int) getX(), (int) getY()));
 		swimType = swim.swimming(isSwimming, isMagma, isMuddy);
