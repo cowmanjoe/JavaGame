@@ -20,6 +20,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import com.redomar.game.entities.Dummy;
 import com.redomar.game.entities.Player;
 import com.redomar.game.entities.PlayerMP;
+import com.redomar.game.entities.Thrower;
 import com.redomar.game.entities.Vendor;
 import com.redomar.game.gfx.Screen;
 import com.redomar.game.gfx.SpriteSheet;
@@ -93,6 +94,10 @@ public class Game extends Canvas implements Runnable {
 	private static InputContext context;
 	
 	private static boolean npcSpawning; 
+	
+	
+	private List<Thrower> throwers; 
+	
 
 	/**
 	 * @author Redomar
@@ -117,6 +122,7 @@ public class Game extends Canvas implements Runnable {
 		setClosing(false);
 		
 		dummies = new ArrayList<Dummy>(); 
+		throwers = new ArrayList<Thrower>(); 
 		npcSpawning = false; 
 	}
 
@@ -187,6 +193,12 @@ public class Game extends Canvas implements Runnable {
 			npcSpawning = false; 
 			
 		}
+	}
+	
+	public static void throwerSpawn() {
+		Thrower newThrower = new Thrower(game.level, "Thrower", 100, 150, 500, 543); 
+		game.addThrower(newThrower);
+		
 	}
 
 	public static void npcKill() {
@@ -657,6 +669,25 @@ public class Game extends Canvas implements Runnable {
 
 	public static void setClosing(boolean closing) {
 		Game.closingMode = closing;
+	}
+	
+	
+	public static List<Thrower> getThrowers() {
+		return game.throwers;
+	}
+
+	public void addThrower(Thrower thrower) {
+		throwers.add(thrower); 
+		game.level.addEntity(thrower);
+	}
+	
+	public void removeThrower(Thrower thrower) {
+		throwers.remove(thrower);
+		game.level.removeEntity(thrower);
+	}
+	
+	public void removeThrower() {
+		throwers.remove(throwers.size() - 1);
 	}
 
 }

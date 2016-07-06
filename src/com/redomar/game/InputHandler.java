@@ -162,6 +162,19 @@ public class InputHandler implements KeyListener {
 				print.print("Dummy has been spawned", PrintTypes.GAME);
 			}
 		}
+		if (keyCode == KeyEvent.VK_T) {
+			if (Game.getPlayer().isMoving()) {
+				setIgnoreInput(true); 
+				int n = popup.Warn("Stop moving before spawning thrower"); 
+				if (n == 0) {
+					setIgnoreInput(false); 
+				}
+				return; 
+			}
+			Game.throwerSpawn();
+			print.print("Thrower has been spawned", PrintTypes.GAME);
+		}
+		
 		if (keyCode == KeyEvent.VK_K) {
 			if (Game.isNpc() == true) {
 				Game.setNpc(false);

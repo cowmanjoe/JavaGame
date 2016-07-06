@@ -15,7 +15,10 @@ public class Inventory {
 	public static void activate() {
 		x = (int) Game.getPlayer().getX();
 		y = (int) Game.getPlayer().getY();
-
+		
+		//To test the inventory
+		enabled = true; 
+		
 		if (Game.getLevel().getTile(x >> 3, y >> 3).getId() == 8) {
 			if (enabled) {
 				if (!open) {

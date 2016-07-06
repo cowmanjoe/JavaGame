@@ -9,82 +9,86 @@ import com.redomar.game.gfx.Screen;
 import com.redomar.game.level.LevelHandler;
 import com.redomar.game.level.Node;
 
-public class Dummy extends Mob {
-
+public class Thrower extends Mob {
+	
 	private int colour, shirtCol, faceCol; // = Colours.get(-1, 111, 240, 310);
 	private int tickCount = 0;
 	private double xa = 0;
 	private double ya = 0;
 	private boolean[] swimType;
 	private int[] swimColour;
-	private static double speed = 0.75;
+	private static double speed = 0.8;
 	private List<Node> path = null;
 	private int time = 0;
-	private static int[] collisionBoders = {0, 7, 0, 7};
+	private static int[] collisionBorders = {0, 7, 0, 7};
 	
-	private double activeRange; 
-
-	private Swim swim;
-
-	public Dummy(LevelHandler level, String name, int x, int y, int shirtCol,
-			int faceCol) {
-		super(level, name, x, y, speed, collisionBoders);
-		this.faceCol = faceCol;
-		this.shirtCol = shirtCol;
-		this.colour = Colours.get(-1, 111, shirtCol, faceCol);
+	private double fireRate; 
+	private double throwRange; 
+	
+	private static final int SHOOT_OUT_FIRE_RATE = 40; 
+	
+	private Swim swim; 
+	
+	
+	public Thrower(LevelHandler level, String name, int x, int y, int ShirtCol, int faceCol) {
+		super(level, name, x, y, speed, collisionBorders); 
+		this.faceCol = faceCol; 
+		this.shirtCol = shirtCol; 
+		this.colour = Colours.get(-1, 111, shirtCol, faceCol); 
 		
-		activeRange = 50; 
+		throwRange = 30;
 	}
 	
-	public Dummy(LevelHandler level, String name, int x, int y, int shirtCol, 
-			int faceCol, double activeRange) {
-		super(level, name, x, y, speed, collisionBoders);
-		this.faceCol = faceCol;
-		this.shirtCol = shirtCol;
-		this.colour = Colours.get(-1, 111, shirtCol, faceCol);
-		
-		this.activeRange = activeRange; 
-	}
-
 	
-
+	@Override
 	public void tick() {
-
-		//List<Player> players = level.getPlayers(this, 8);
 		Player player = Game.getPlayer(); 
 		
-		double xDistToPlayer = player.getX() - getX();
+		double xDistToPlayer = player.getX() - getX(); 
 		double yDistToPlayer = player.getY() - getY(); 
 		
 		double distToPlayer = Math.sqrt(xDistToPlayer * xDistToPlayer + yDistToPlayer * yDistToPlayer);
 		
-		if (distToPlayer <= activeRange) {
-			aStarMovementAI((int) getX(), (int) getY(), (int) Game.getPlayer().getX(), (int) Game
-						.getPlayer().getY(), xa, ya, speed, this, path, time);
+		if (fireRate > 0) fireRate--; 
+		
+		if (distToPlayer <= throwRange) {
+			//Dont move and shoot
+			System.out.println("Thrower " + this.hashCode() + " came within range of the player.");
+			if (fireRate <= 0) {
+				fireRate = SHOOT_OUT_FIRE_RATE;
+				shootOut(x, y, false, 20);
+				
+			}
+		} else {
+			//move towards player
+			aStarMovementAI((int) getX(), (int) getY(), (int) Game.getPlayer().getX(), 
+					(int) Game.getPlayer().getY(), xa, ya, speed, this, path, time); 
 		}
-
-		setSwim(new Swim(level, (int) getX(), (int) getY()));
+		
+		setSwim(new Swim(level, (int) getX(), (int)getY())); 
 		swimType = swim.swimming(isSwimming, isMagma, isMuddy);
-		isSwimming = swimType[0];
-		isMagma = swimType[1];
-		isMuddy = swimType[2];
-
-		tickCount++;
+		isSwimming = swimType[0]; 
+		isMagma = swimType[1]; 
+		isMuddy = swimType[2]; 
+		
+		tickCount++; 
 
 	}
 
+	@Override
 	public void render(Screen screen) {
-		time++;
-		int xTile = 8;
+		time++; 
+		//Using the dummy sprite as a place holder
+		int xTile = 8; 
 		int yTile = 28;
-		int walkingSpeed = 4;
-		int flipTop = (numSteps >> walkingSpeed) & 1;
-		int flipBottom = (numSteps >> walkingSpeed) & 1;
-
+		int walkingSpeed = 4; 
+		int flipTop = (numSteps >> walkingSpeed) & 1; 
+		int flipBottom = (numSteps >> walkingSpeed) & 1; 
+		
 		if (movingDir == 1) {
-			xTile += 2;
-			if (!isMoving || swim.isActive(swimType)){
-				yTile -= 2;
+			xTile += 2; 
+			if (!isMoving || swim.isActive(swimType)) {
+				yTile -= 2; 
 			}
 		} else if (movingDir == 0 && !isMoving || movingDir == 0 && swim.isActive(swimType)) {
 			yTile -= 2;
@@ -95,7 +99,6 @@ public class Dummy extends Mob {
 				xTile = 4;
 			}
 		}
-
 		int modifier = 8 * scale;
 		int xOffset = (int) getX() - modifier / 2;
 		int yOffset = (int) getY() - modifier / 2 - 4;
@@ -139,13 +142,16 @@ public class Dummy extends Mob {
 					colour, flipBottom, scale);
 			colour = Colours.get(-1, 111, shirtCol, faceCol);
 		}
-	}
+		
 
+	}
+	
+	
 	public Swim getSwim() {
 		return swim;
 	}
-
+	
 	public void setSwim(Swim swim) {
-		this.swim = swim;
+		this.swim = swim; 
 	}
 }
