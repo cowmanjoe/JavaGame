@@ -12,6 +12,8 @@ import com.redomar.game.level.LevelHandler;
 import com.redomar.game.level.Node;
 import com.redomar.game.level.tiles.Tile;
 import com.redomar.game.lib.utils.Vector2i;
+import com.redomar.game.script.PrintTypes;
+import com.redomar.game.script.Printing;
 
 public abstract class Mob extends Entity {
 
@@ -240,8 +242,8 @@ public abstract class Mob extends Entity {
 //		Printing print = new Printing();
 //		print.print("Angle: "+ dir, PrintTypes.GAME);
 		if(buttonId == 1){
-			//Projectile p = new Small(level, (int) x,(int) y, dir);
-			Projectile p = new Bouncy(level, (int) x, (int) y, dir); 
+			Projectile p = new Small(level, (int) x,(int) y, dir);
+			//Projectile p = new Bouncy(level, (int) x, (int) y, dir); 
 			projectiles.add(p);
 			level.addProjectileEntities(p);
 		} else if(buttonId == 3 && secondry == true){
@@ -251,10 +253,27 @@ public abstract class Mob extends Entity {
 		}
 	}
 	
+	protected void shootBouncy(double x, double y, double dir) {
+		Projectile p = new Bouncy(level, (int) x, (int) y, dir); 
+		
+		projectiles.add(p); 
+		level.addProjectileEntities(p);
+	}
+	
 	protected void shootOut(double x, double y, boolean secondry, int numShots) {
 		for (int i = 0; i < numShots; i++) {
 			this.shoot(x, y, (2 * Math.PI / numShots) * i , 1, secondry);
 		}
+	}
+	
+	protected void shootAt(double x, double y, double targetX, double targetY, double buttonId, boolean secondry) {
+		double xDist = targetX - x; 
+		double yDist = targetY - y; 
+		
+		
+		double dir = Math.atan2(yDist, xDist); 		
+		
+		shoot(x, y, dir, buttonId, secondry); 
 	}
 
 	public String getName() {

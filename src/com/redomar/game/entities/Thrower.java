@@ -56,7 +56,7 @@ public class Thrower extends Mob {
 			System.out.println("Thrower " + this.hashCode() + " came within range of the player.");
 			if (fireRate <= 0) {
 				fireRate = SHOOT_OUT_FIRE_RATE;
-				shootOut(x, y, false, 20);
+				shootAt(x, y, player.getX(), player.getY(), 1, false);
 				
 			}
 		} else {
